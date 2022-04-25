@@ -39,4 +39,8 @@ public class DoctorRepo {
 		doctorRepository.delete(doctor);
 	}
 
+	public void saveDoctorList(List<Doctor> doctors) {
+		doctorRepository.saveAll(doctors);
+	}
+
 }

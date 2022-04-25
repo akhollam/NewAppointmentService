@@ -8,7 +8,6 @@ import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.newAppointmentService.entity.Address;
@@ -29,7 +28,7 @@ public class DoctorServiceImpl implements DoctorService {
 		Doctor doctor = new Doctor();
 		doctor.setName(doctorDto.getName());
 		doctor.setSpeciality(doctorDto.getSpeciality());
-		// doctor.setDegree(doctorDto.getDegree());
+		doctor.setDegree(doctorDto.getDegree());
 		
 		Address add = new Address();
 		add.setCity("Pune");
@@ -101,6 +100,24 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 
 		return allDocDtos;
+	}
+
+	@Override
+	public void createDoctors(List<DoctorDto> doctorDtoList) {
+		
+		List<Doctor> doctors = new ArrayList<>();
+		
+		for (DoctorDto doctorDto : doctorDtoList) {
+			// createDoctor(doctorDto);
+			Doctor doctor = new Doctor();
+			doctor.setName(doctorDto.getName());
+			doctor.setSpeciality(doctorDto.getSpeciality());
+			doctor.setDegree(doctorDto.getDegree());
+			doctors.add(doctor);
+		}
+		
+		doctorRepo.saveDoctorList(doctors);
+		
 	}
 
 }

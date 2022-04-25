@@ -3,6 +3,7 @@ package com.newAppointmentService.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,9 +22,16 @@ import com.newAppointmentService.service.DoctorService;
 
 import lombok.extern.slf4j.Slf4j;
 
+// @Controller
 @RestController
 @Slf4j
 public class DoctorController {
+	
+	@Value("${doctor.clinic.name}")
+	private String clinicName; 
+	
+	@Value("${spring.application.name}")
+	private String applicationName; 
 
 	@Autowired
 	private DoctorService doctorService;
@@ -35,6 +42,9 @@ public class DoctorController {
 	// @RequestMapping(value = "/doctor", method = RequestMethod.GET)
 	@GetMapping(value = "/doctor", produces = { "application/json", "application/xml" })
 	private List<DoctorDto> getAllDoctor() {
+		
+		log.debug("clinicName - {} ", clinicName);
+		
 		return doctorService.getAllDoctors();
 	}
 
@@ -47,19 +57,18 @@ public class DoctorController {
 		doctorService.createDoctor(doctorDto);
 	}
 
-	@RequestMapping(value = "/doctor/{doctor_id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/doctor/{doctor_id}", method = RequestMethod.GET, produces = "application/json")
+	// @GetMapping
 	private ResponseEntity<DoctorDto> getDoctor(@PathVariable("doctor_id") Integer doctorId) {
 
 		DoctorDto dto = doctorService.getDoctor(doctorId);
 
 		log.debug("dtodtodtodtodto - {}", dto);
-
 		if (dto == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity(dto, HttpStatus.OK);
-
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	// @RequestMapping(value = "/doctor/{doctor_id}", method = RequestMethod.PUT)
@@ -75,4 +84,13 @@ public class DoctorController {
 		doctorService.deleteDoctor(doctorId);
 	}
 
+	
+	@PostMapping(value = "/doctors", consumes = "application/json")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	private void createAllDoctor(@RequestBody List<DoctorDto> doctorDtoList) {
+
+		log.debug("doctorDto - {}", doctorDtoList);
+		doctorService.createDoctors(doctorDtoList);
+	}
+	
 }

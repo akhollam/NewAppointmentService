@@ -16,4 +16,6 @@ public interface DoctorService {
 
 	List<DoctorDto> getAllDoctors();
 
+	void createDoctors(List<DoctorDto> doctorDtoList);
+
 }
