@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: AppointmentService
+  datasource:
+    url: jdbc:mysql://localhost:3306/docservice?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: secret
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+server:
+  port: 8081
+  servlet:
+    context-path: /doc-service/
+    
+    
+    

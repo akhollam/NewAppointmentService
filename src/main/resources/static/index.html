@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+<script type="text/javascript">
+
+	function createDoc(e){
+		
+		// alert("create doc called. ");
+		
+		e.preventDefault();
+		
+		var doc = {
+				
+				doctor_name : document.getElementById("name").value,
+				doctor_speciality : document.getElementById("speciality").value,
+				doctor_degree : document.getElementById("degree").value
+			};
+			
+			// alert("creating a doc on server");
+			
+			fetch('/doc-service/doctor', 
+					{
+						method: 'POST', 
+						headers: {
+			      					'Content-Type': 'application/json'
+						        },
+						body : JSON.stringify(doc)
+						
+			}).then(result => {
+				console.log(result);
+				loadAllDoctor();
+				alert('doctor created successfuly.');
+			});
+		
+	}
+
+	function loadAllDoctor(){
+		
+		// alert('Yes I am ready. ');
+		
+		fetch('/doc-service/doctor').then(result => result.json()).then(result => {
+		
+			console.log(result);
+			var docListEle = document.getElementById("docList");
+			docListEle.innerHTML = "";
+			result.forEach(data => {
+				docListEle.innerHTML += "<span>" + data.doctor_name + " </span> <br/>";
+			});
+		
+		});
+	}
+
+</script>
+
+</head>
+<body onload="loadAllDoctor()">
+	<h3>This is a sample html page.</h3>
+	<hr />
+	
+	
+	<form onsubmit="createDoc(event);" >
+		
+		Name - <input type="text" id="name">
+		Speciality - <input type="text" id="speciality">
+		Degree - <input type="text" id="degree">
+		
+		<button type="submit"  >Create Using Fetch </button>
+	
+	</form>
+	<hr/>
+	<div id="docList">
+		
+	</div>
+	
+</body>
+</html>
